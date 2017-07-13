@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popup_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/masker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#C000"/>
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_gravity="top"
+            android:background="#ffffff"
+            tools:listitem="@layout/album_list_item"/>
+    </FrameLayout>
+
+</LinearLayout>
