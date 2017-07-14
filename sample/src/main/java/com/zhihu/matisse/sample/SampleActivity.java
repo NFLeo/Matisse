@@ -108,14 +108,16 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                     break;
                                 case R.id.dracula:
                                     Matisse.from(SampleActivity.this)
-                                            .choose(MimeType.ofAll(), false)
-                                            .capture(true)
-                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
-                                            .maxSelectable(1)
-                                            .isCrop(true)
-                                            .cropStyle(CropImageView.Style.RECTANGLE)
-                                            .isCropSaveRectangle(true)
-                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                            .choose(MimeType.ofAll(), false)      // 展示所有类型文件（图片 视频 gif）
+                                            .capture(true)                        // 可拍照
+                                            .captureStrategy(new CaptureStrategy(true, "cache path"))
+                                            .maxSelectable(1)                     // 最多选择一张
+                                            .isCrop(true)                         // 开启裁剪
+                                            .cropOutPutX(400)                     // 设置裁剪后保存图片的宽高
+                                            .cropOutPutY(400)                     // 设置裁剪后保存图片的宽高
+                                            .cropStyle(CropImageView.Style.RECTANGLE)   // 方形裁剪CIRCLE为圆形裁剪
+                                            .isCropSaveRectangle(true)                  // 裁剪后保存方形（只对圆形裁剪有效）
+                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  // 筛选数据源可选大小限制
                                             .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .thumbnailScale(0.8f)

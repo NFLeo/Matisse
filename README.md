@@ -17,27 +17,7 @@ Matisse is a well-designed local image and video selector for Android. You can
 |:------------------------------:|:---------------------------------:|:--------------------------------:|
 |![](image/screenshot_zhihu.png) | ![](image/screenshot_dracula.png) | ![](image/screenshot_preview.png)|
 
-## Download
-Gradle:
-
-```groovy
-repositories {
-    jcenter()
-}
-
-dependencies {
-    compile 'com.zhihu.android:matisse:0.4.3'
-}
-```
-
 Check out [Matisse releases](https://github.com/zhihu/Matisse/releases) to see more unstable versions.
-
-## ProGuard
-If you use [Glide](https://github.com/bumptech/glide) as your image engine, add rules as Glide's README says.  
-And add extra rule:
-```pro
--dontwarn com.squareup.picasso.**
-```
 
 If you use [Picasso](https://github.com/square/picasso) as your image engine, add rules as Picasso's README says.  
 And add extra rule:
@@ -66,6 +46,24 @@ Matisse.from(MainActivity.this)
         .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
         .thumbnailScale(0.85f)
+        .imageEngine(new GlideEngine())
+        .forResult(REQUEST_CODE_CHOOSE);
+
+Matisse.from(SampleActivity.this)
+        .choose(MimeType.ofAll(), false)      // 展示所有类型文件（图片 视频 gif）
+        .capture(true)                        // 可拍照
+        .countable(true)                      // 记录文件选择顺序
+        .captureStrategy(new CaptureStrategy(true, "cache path"))
+        .maxSelectable(1)                     // 最多选择一张
+        .isCrop(true)                         // 开启裁剪
+        .cropOutPutX(400)                     // 设置裁剪后保存图片的宽高
+        .cropOutPutY(400)                     // 设置裁剪后保存图片的宽高
+        .cropStyle(CropImageView.Style.RECTANGLE)   // 方形裁剪CIRCLE为圆形裁剪
+        .isCropSaveRectangle(true)                  // 裁剪后保存方形（只对圆形裁剪有效）
+        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  // 筛选数据源可选大小限制
+        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        .thumbnailScale(0.8f)
         .imageEngine(new GlideEngine())
         .forResult(REQUEST_CODE_CHOOSE);
 ```
