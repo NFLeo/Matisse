@@ -103,7 +103,7 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
             setResult(RESULT_CANCELED);
             finish();
         } else if (id == R.id.btn_ok) {
-            mCropImageView.saveBitmapToFile(getCropCacheFolder(this), 800, 800, mIsSaveRectangle);
+            mCropImageView.saveBitmapToFile(getCropCacheFolder(this), mOutputX, mOutputY, mIsSaveRectangle);
         }
     }
 

@@ -133,7 +133,7 @@ public final class SelectionCreator {
      * @return {@link SelectionCreator} for fluent API.
      */
     public SelectionCreator countable(boolean countable) {
-        mSelectionSpec.countable = mSelectionSpec.maxSelectable > 1 ? countable : false;
+        mSelectionSpec.countable = countable;
         return this;
     }
 

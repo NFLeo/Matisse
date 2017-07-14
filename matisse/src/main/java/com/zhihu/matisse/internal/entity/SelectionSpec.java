@@ -87,10 +87,10 @@ public final class SelectionSpec {
         imageEngine = new GlideEngine();
         isCrop = true;
         isCropSaveRectangle = false;
-        cropOutPutX = 800;
-        cropOutPutY = 800;
-        cropFocusWidth = 280;
-        cropFocusHeight = 280;
+        cropOutPutX = 300;
+        cropOutPutY = 300;
+        cropFocusWidth = 800;
+        cropFocusHeight = 800;
         cropStyle = CropImageView.Style.RECTANGLE;
     }
 

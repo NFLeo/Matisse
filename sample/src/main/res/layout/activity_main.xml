@@ -81,7 +81,7 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/image"
         android:adjustViewBounds="true"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="100dp" />
 
     <android.support.v7.widget.RecyclerView
