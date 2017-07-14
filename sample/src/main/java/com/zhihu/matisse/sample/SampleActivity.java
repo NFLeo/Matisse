@@ -26,15 +26,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+import com.zhihu.matisse.internal.entity.SelectionSpec;
+import com.zhihu.matisse.internal.ui.widget.CropImageView;
 
 import java.util.List;
 
@@ -52,6 +56,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.zhihu).setOnClickListener(this);
+        findViewById(R.id.zhihus).setOnClickListener(this);
         findViewById(R.id.dracula).setOnClickListener(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
@@ -65,9 +70,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(new Observer<Boolean>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
+                    public void onSubscribe(Disposable d) { }
 
                     @Override
                     public void onNext(Boolean aBoolean) {
@@ -76,10 +79,30 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                 case R.id.zhihu:
                                     Matisse.from(SampleActivity.this)
                                             .choose(MimeType.ofAll(), false)
-                                            .countable(false)
+                                            .countable(true)
+                                            .capture(true)
+                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+                                            .maxSelectable(9)
+                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                            .thumbnailScale(0.8f)
+                                            .imageEngine(new GlideEngine())
+                                            .forResult(REQUEST_CODE_CHOOSE);
+                                    break;
+                                case R.id.zhihus:
+                                    Matisse.from(SampleActivity.this)
+                                            .choose(MimeType.ofAll(), false)
                                             .capture(true)
                                             .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
                                             .maxSelectable(1)
+                                            .isCrop(true)
+                                            .cropStyle(CropImageView.Style.CIRCLE)
+                                            .cropFocusWidth(2000)
+                                            .cropFocusWidth(2000)
+                                            .cropOutPutX(2000)
+                                            .cropOutPutY(2000)
+                                            .isCropSaveRectangle(false)
                                             .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                                             .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -89,10 +112,21 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                     break;
                                 case R.id.dracula:
                                     Matisse.from(SampleActivity.this)
-                                            .choose(MimeType.ofImage())
-                                            .theme(R.style.Matisse_Dracula)
-                                            .countable(false)
-                                            .maxSelectable(9)
+                                            .choose(MimeType.ofAll(), false)
+                                            .capture(true)
+                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+                                            .maxSelectable(1)
+                                            .isCrop(true)
+                                            .cropStyle(CropImageView.Style.RECTANGLE)
+                                            .cropFocusWidth(1000)
+                                            .cropFocusWidth(1000)
+                                            .cropOutPutX(1000)
+                                            .cropOutPutY(1000)
+                                            .isCropSaveRectangle(true)
+                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                            .thumbnailScale(0.8f)
                                             .imageEngine(new GlideEngine())
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;
@@ -104,14 +138,10 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-
-                    }
+                    public void onError(Throwable e) { }
 
                     @Override
-                    public void onComplete() {
-
-                    }
+                    public void onComplete() { }
                 });
     }
 
@@ -120,6 +150,13 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             mAdapter.setData(Matisse.obtainResult(data), Matisse.obtainPathResult(data));
+            if (Matisse.obtainPathResult(data).size() <= 1) {
+                Glide.with(SampleActivity.this)
+                        .load(Matisse.obtainPathResult(data).get(0))
+                        .asBitmap()  // some .jpeg files are actually gif
+                        .centerCrop()
+                        .into(((ImageView) findViewById(R.id.image)));
+            }
         }
     }
 

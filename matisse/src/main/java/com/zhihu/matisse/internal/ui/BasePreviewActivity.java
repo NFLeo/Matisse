@@ -139,9 +139,7 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
 
     @Override
     public void onPageSelected(int position) {
@@ -173,9 +171,7 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
+    public void onPageScrollStateChanged(int state) { }
 
     private void updateApplyButton() {
         int selectedCount = mSelectedCollection.count();

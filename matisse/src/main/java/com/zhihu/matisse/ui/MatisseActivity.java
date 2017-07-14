@@ -31,13 +31,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.Album;
 import com.zhihu.matisse.internal.entity.Item;
@@ -51,8 +51,6 @@ import com.zhihu.matisse.internal.ui.SelectedPreviewActivity;
 import com.zhihu.matisse.internal.ui.adapter.AlbumMediaAdapter;
 import com.zhihu.matisse.internal.ui.adapter.AlbumsAdapter;
 import com.zhihu.matisse.internal.ui.widget.AlbumPopup;
-import com.zhihu.matisse.internal.ui.widget.AlbumsSpinner;
-import com.zhihu.matisse.internal.ui.widget.FolderPopUpWindow;
 import com.zhihu.matisse.internal.utils.MediaStoreCompat;
 import com.zhihu.matisse.internal.utils.PathUtils;
 
@@ -72,6 +70,7 @@ public class MatisseActivity extends AppCompatActivity implements
     public static final String EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path";
     private static final int REQUEST_CODE_PREVIEW = 23;
     private static final int REQUEST_CODE_CAPTURE = 24;
+    private static final int REQUEST_CODE_CROP = 25;
     private final AlbumCollection mAlbumCollection = new AlbumCollection();
     private MediaStoreCompat mMediaStoreCompat;
     private SelectedItemCollection mSelectedCollection = new SelectedItemCollection(this);
@@ -156,31 +155,6 @@ public class MatisseActivity extends AppCompatActivity implements
                 onAlbumSelected(album);
             }
         });
-
-//        mFolderPopupWindow.setOnItemClickListener(new FolderPopUpWindow.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                mFolderPopupWindow.dismiss();
-//                mAlbumCollection.setStateCurrentSelection(position);
-//                mAlbumsAdapter.getCursor().moveToPosition(position);
-//                Album album = Album.valueOf(mAlbumsAdapter.getCursor());
-//                if (album.isAll() && SelectionSpec.getInstance().capture) {
-//                    album.addCaptureCount();
-//                }
-//                onAlbumSelected(album);
-////                mAlbumsAdapter.setSelectIndex(position);
-////                imagePicker.setCurrentImageFolderPosition(position);
-////                mFolderPopupWindow.dismiss();
-////                ImageFolder imageFolder = (ImageFolder) adapterView.getAdapter().getItem(position);
-////                if (null != imageFolder) {
-//////                    mImageGridAdapter.refreshData(imageFolder.images);
-////                    mRecyclerAdapter.refreshData(imageFolder.images);
-////                    mBtnDir.setText(imageFolder.name);
-////                }
-////                mGridView.smoothScrollToPosition(0);//滑动到顶部
-//            }
-//        });
-//        mFolderPopupWindow.setMargin(180);
     }
 
     @Override
@@ -261,6 +235,17 @@ public class MatisseActivity extends AppCompatActivity implements
                 MatisseActivity.this.revokeUriPermission(contentUri,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
             finish();
+        } else if (requestCode == REQUEST_CODE_CROP) {
+
+            String resultPath = data.getStringExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
+            Intent result = new Intent();
+            ArrayList<Uri> selectedUris = new ArrayList<>();
+            ArrayList<String> selectedPaths = new ArrayList<>();
+            selectedPaths.add(resultPath);
+            result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
+            result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
+            setResult(RESULT_OK, result);
+            finish();
         }
     }
 
@@ -288,13 +273,17 @@ public class MatisseActivity extends AppCompatActivity implements
             intent.putExtra(BasePreviewActivity.EXTRA_DEFAULT_BUNDLE, mSelectedCollection.getDataWithBundle());
             startActivityForResult(intent, REQUEST_CODE_PREVIEW);
         } else if (v.getId() == R.id.button_apply) {
+            ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
+            ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
+
             if (mSpec.maxSelectable <= 1) { // 单选
                 Toast.makeText(this, "裁剪", Toast.LENGTH_SHORT).show();
+                Intent intentCrop = new Intent(MatisseActivity.this, ImageCropActivity.class);
+                intentCrop.putExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths.get(0));
+                startActivityForResult(intentCrop, REQUEST_CODE_CROP);
             } else {
                 Intent result = new Intent();
-                ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
                 result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
-                ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
                 result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
                 setResult(RESULT_OK, result);
                 finish();

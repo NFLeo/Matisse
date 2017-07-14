@@ -29,8 +29,10 @@ import com.zhihu.matisse.engine.ImageEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
+import com.zhihu.matisse.internal.ui.widget.CropImageView;
 import com.zhihu.matisse.ui.MatisseActivity;
 
+import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -243,7 +245,6 @@ public final class SelectionCreator {
 
     /**
      * Provide an image engine.
-     * <p>
      * There are two built-in image engines:
      * 1. {@link com.zhihu.matisse.engine.impl.GlideEngine}
      * And you can implement your own image engine.
@@ -257,11 +258,64 @@ public final class SelectionCreator {
     }
 
     /**
+     * Whether to support crop
+     * If this value is set true, it will support function crop.
+     * @param crop Whether to support crop or not. Default value is false;
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator isCrop(boolean crop) {
+        mSelectionSpec.isCrop = crop;
+        return this;
+    }
+
+    /**
+     * Whether to stay circle or rectangle when Circle style
+     * 圆形裁剪模式下，保存圆形图片或方形， 默认圆形
+     * If this value is set true, it will stay rectangle to save image.
+     * @param cropSaveRectangle Whether to stay rectangle or not. Default value is false;
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator isCropSaveRectangle(boolean cropSaveRectangle) {
+        mSelectionSpec.isCropSaveRectangle = cropSaveRectangle;
+        return this;
+    }
+
+    public SelectionCreator cropOutPutX(int cropOutPutX) {
+        mSelectionSpec.cropOutPutX = cropOutPutX;
+        return this;
+    }
+
+    public SelectionCreator cropOutPutY(int cropOutPutY) {
+        mSelectionSpec.cropOutPutY = cropOutPutY;
+        return this;
+    }
+
+    public SelectionCreator cropFocusWidth(int cropFocusWidth) {
+        mSelectionSpec.cropFocusWidth = cropFocusWidth;
+        return this;
+    }
+
+    public SelectionCreator cropFocusHeight(int cropFocusHeight) {
+        mSelectionSpec.cropFocusHeight = cropFocusHeight;
+        return this;
+    }
+
+    public SelectionCreator cropStyle(CropImageView.Style cropStyle) {
+        mSelectionSpec.cropStyle = cropStyle;
+        return this;
+    }
+
+    public SelectionCreator cropCacheFolder(File cropCacheFolder) {
+        mSelectionSpec.cropCacheFolder = cropCacheFolder;
+        return this;
+    }
+
+    /**
      * Start to select media and wait for result.
-     *
      * @param requestCode Identity of the request Activity or Fragment.
      */
     public void forResult(int requestCode) {
+        mSelectionSpec.requestCode = requestCode;
         Activity activity = mMatisse.getActivity();
         if (activity == null) {
             return;

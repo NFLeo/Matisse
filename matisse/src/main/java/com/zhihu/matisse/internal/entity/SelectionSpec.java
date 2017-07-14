@@ -24,7 +24,9 @@ import com.zhihu.matisse.R;
 import com.zhihu.matisse.engine.ImageEngine;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
+import com.zhihu.matisse.internal.ui.widget.CropImageView;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -45,9 +47,18 @@ public final class SelectionSpec {
     public int gridExpectedSize;
     public float thumbnailScale;
     public ImageEngine imageEngine;
+    public int requestCode;
 
-    private SelectionSpec() {
-    }
+    public boolean isCrop;                 // 裁剪
+    public boolean isCropSaveRectangle;    // 裁剪后的图片是否是矩形，否则跟随裁剪框的形状，只适用于圆形裁剪
+    public int cropOutPutX;                // 裁剪保存宽度
+    public int cropOutPutY;                // 裁剪保存高度
+    public int cropFocusWidth;             // 焦点框的宽度
+    public int cropFocusHeight;            // 焦点框的高度
+    public CropImageView.Style cropStyle;  // 裁剪框的形状
+    public File cropCacheFolder;           // 裁剪后文件保存路径
+
+    private SelectionSpec() { }
 
     public static SelectionSpec getInstance() {
         return InstanceHolder.INSTANCE;
@@ -74,6 +85,13 @@ public final class SelectionSpec {
         gridExpectedSize = 0;
         thumbnailScale = 0.5f;
         imageEngine = new GlideEngine();
+        isCrop = true;
+        isCropSaveRectangle = false;
+        cropOutPutX = 800;
+        cropOutPutY = 800;
+        cropFocusWidth = 280;
+        cropFocusHeight = 280;
+        cropStyle = CropImageView.Style.RECTANGLE;
     }
 
     public boolean singleSelectionModeEnabled() {
