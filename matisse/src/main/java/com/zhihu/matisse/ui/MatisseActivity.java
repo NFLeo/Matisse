@@ -191,7 +191,10 @@ public class MatisseActivity extends AppCompatActivity implements
         if (resultCode != RESULT_OK)
             return;
 
-        String cropPath = data.getStringExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
+        String cropPath = "";
+        if (data != null) {
+            cropPath = data.getStringExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
+        }
 
         if (requestCode == REQUEST_CODE_PREVIEW) {
 
