@@ -191,7 +191,16 @@ public class MatisseActivity extends AppCompatActivity implements
         if (resultCode != RESULT_OK)
             return;
 
+        String cropPath = data.getStringExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
+
         if (requestCode == REQUEST_CODE_PREVIEW) {
+
+            if (!"".equals(cropPath) && cropPath != null) {
+                // 裁剪带回数据，则认为图片经过裁剪流程
+                returnCropData(cropPath);
+                return;
+            }
+
             Bundle resultBundle = data.getBundleExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
             ArrayList<Item> selected = resultBundle.getParcelableArrayList(SelectedItemCollection.STATE_SELECTION);
             int collectionType = resultBundle.getInt(SelectedItemCollection.STATE_COLLECTION_TYPE,
@@ -236,17 +245,20 @@ public class MatisseActivity extends AppCompatActivity implements
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
             finish();
         } else if (requestCode == REQUEST_CODE_CROP) {
-
-            String resultPath = data.getStringExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
-            Intent result = new Intent();
-            ArrayList<Uri> selectedUris = new ArrayList<>();
-            ArrayList<String> selectedPaths = new ArrayList<>();
-            selectedPaths.add(resultPath);
-            result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
-            result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
-            setResult(RESULT_OK, result);
-            finish();
+            // crop result
+            returnCropData(cropPath);
         }
+    }
+
+    private void returnCropData(String cropPath) {
+        Intent result = new Intent();
+        ArrayList<Uri> selectedUris = new ArrayList<>();
+        ArrayList<String> selectedPaths = new ArrayList<>();
+        selectedPaths.add(cropPath);
+        result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
+        result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
+        setResult(RESULT_OK, result);
+        finish();
     }
 
     private void updateBottomToolbar() {
@@ -276,8 +288,7 @@ public class MatisseActivity extends AppCompatActivity implements
             ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
             ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
 
-            if (mSpec.maxSelectable <= 1) { // 单选
-                Toast.makeText(this, "裁剪", Toast.LENGTH_SHORT).show();
+            if (mSpec.maxSelectable <= 1 && mSpec.isCrop) { // 单选
                 Intent intentCrop = new Intent(MatisseActivity.this, ImageCropActivity.class);
                 intentCrop.putExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths.get(0));
                 startActivityForResult(intentCrop, REQUEST_CODE_CROP);

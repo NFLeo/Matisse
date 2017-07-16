@@ -17,13 +17,17 @@ package com.zhihu.matisse.internal.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.IncapableCause;
@@ -32,8 +36,17 @@ import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.internal.model.SelectedItemCollection;
 import com.zhihu.matisse.internal.ui.adapter.PreviewPagerAdapter;
 import com.zhihu.matisse.internal.ui.widget.CheckView;
+import com.zhihu.matisse.internal.utils.PathUtils;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 import com.zhihu.matisse.internal.utils.Platform;
+import com.zhihu.matisse.ui.ImageCropActivity;
+import com.zhihu.matisse.ui.MatisseActivity;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public abstract class BasePreviewActivity extends AppCompatActivity implements View.OnClickListener,
         ViewPager.OnPageChangeListener {
@@ -41,6 +54,11 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
     public static final String EXTRA_DEFAULT_BUNDLE = "extra_default_bundle";
     public static final String EXTRA_RESULT_BUNDLE = "extra_result_bundle";
     public static final String EXTRA_RESULT_APPLY = "extra_result_apply";
+
+    public static final String EXTRA_RESULT_SELECTION = "extra_result_selection";
+    public static final String EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path";
+
+    private static final int REQUEST_CODE_CROP = 25;
 
     protected final SelectedItemCollection mSelectedCollection = new SelectedItemCollection(this);
     protected SelectionSpec mSpec;
@@ -133,7 +151,30 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         if (v.getId() == R.id.button_back) {
             onBackPressed();
         } else if (v.getId() == R.id.button_apply) {
-            sendBackResult(true);
+            if (mSpec.isCrop && mSpec.maxSelectable <= 1) {
+                Intent intentCrop = new Intent(this, ImageCropActivity.class);
+                intentCrop.putExtra(MatisseActivity.EXTRA_RESULT_SELECTION_PATH,
+                        PathUtils.getPath(this, mAdapter.getMediaItem(mPager.getCurrentItem()).getContentUri()));
+                startActivityForResult(intentCrop, REQUEST_CODE_CROP);
+            } else {
+                sendBackResult(true);
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK)
+            return;
+
+        if (requestCode == REQUEST_CODE_CROP) {
+
+            String resultPath = data.getStringExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
+            Intent result = new Intent();
+            result.putExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE, resultPath);
+            setResult(RESULT_OK, result);
             finish();
         }
     }

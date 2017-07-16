@@ -118,7 +118,6 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onBitmapSaveSuccess(File file) {
-        Toast.makeText(ImageCropActivity.this, "裁剪成功:" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         intent.putExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE, file.getAbsolutePath());
         setResult(Activity.RESULT_OK, intent);
