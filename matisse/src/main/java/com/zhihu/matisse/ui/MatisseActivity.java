@@ -239,14 +239,21 @@ public class MatisseActivity extends AppCompatActivity implements
             selected.add(contentUri);
             ArrayList<String> selectedPath = new ArrayList<>();
             selectedPath.add(path);
-            Intent result = new Intent();
-            result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selected);
-            result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPath);
-            setResult(RESULT_OK, result);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                MatisseActivity.this.revokeUriPermission(contentUri,
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            finish();
+
+            if (mSpec.maxSelectable <= 1 && mSpec.isCrop) { // 单选
+                Intent intentCrop = new Intent(MatisseActivity.this, ImageCropActivity.class);
+                intentCrop.putExtra(EXTRA_RESULT_SELECTION_PATH, selectedPath.get(0));
+                startActivityForResult(intentCrop, REQUEST_CODE_CROP);
+            } else {
+                Intent result = new Intent();
+                result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selected);
+                result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPath);
+                setResult(RESULT_OK, result);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                    MatisseActivity.this.revokeUriPermission(contentUri,
+                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                finish();
+            }
         } else if (requestCode == REQUEST_CODE_CROP) {
             // crop result
             returnCropData(cropPath);
@@ -303,11 +310,11 @@ public class MatisseActivity extends AppCompatActivity implements
                 finish();
             }
         } else if (v.getId() == R.id.selected_album) {
-                createPopupFolderList();
-                //默认选择当前选择的上一个，当目录很多时，直接定位到已选中的条目
+            createPopupFolderList();
+            //默认选择当前选择的上一个，当目录很多时，直接定位到已选中的条目
 //                int index = mImageFolderAdapter.getSelectIndex();
 //                index = index == 0 ? index : index - 1;
-                mFolderPopupWindow.setSelection(mAlbumCollection.getCurrentSelection());
+            mFolderPopupWindow.setSelection(mAlbumCollection.getCurrentSelection());
         }
     }
 
