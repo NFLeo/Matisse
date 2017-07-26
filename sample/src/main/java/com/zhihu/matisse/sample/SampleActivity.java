@@ -110,7 +110,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                     Matisse.from(SampleActivity.this)
                                             .choose(MimeType.ofAll(), false)      // 展示所有类型文件（图片 视频 gif）
                                             .capture(true)                        // 可拍照
-                                            .captureStrategy(new CaptureStrategy(true, "cache path"))
+                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
                                             .maxSelectable(1)                     // 最多选择一张
                                             .isCrop(true)                         // 开启裁剪
                                             .cropOutPutX(400)                     // 设置裁剪后保存图片的宽高
