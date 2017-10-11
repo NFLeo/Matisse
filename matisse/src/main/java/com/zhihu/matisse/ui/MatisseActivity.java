@@ -298,7 +298,7 @@ public class MatisseActivity extends AppCompatActivity implements
             ArrayList<Uri> selectedUris = (ArrayList<Uri>) mSelectedCollection.asListOfUri();
             ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
 
-            if (mSpec.maxSelectable <= 1 && mSpec.isCrop) { // 单选
+            if (mSpec.maxSelectable <= 1 && mSpec.isCrop && mSelectedCollection.asList().get(0).isImage()) { // 单选
                 Intent intentCrop = new Intent(MatisseActivity.this, ImageCropActivity.class);
                 intentCrop.putExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths.get(0));
                 startActivityForResult(intentCrop, REQUEST_CODE_CROP);
