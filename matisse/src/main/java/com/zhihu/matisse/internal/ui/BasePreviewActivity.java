@@ -17,17 +17,13 @@ package com.zhihu.matisse.internal.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.IncapableCause;
@@ -42,21 +38,12 @@ import com.zhihu.matisse.internal.utils.Platform;
 import com.zhihu.matisse.ui.ImageCropActivity;
 import com.zhihu.matisse.ui.MatisseActivity;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 public abstract class BasePreviewActivity extends AppCompatActivity implements View.OnClickListener,
         ViewPager.OnPageChangeListener {
 
     public static final String EXTRA_DEFAULT_BUNDLE = "extra_default_bundle";
     public static final String EXTRA_RESULT_BUNDLE = "extra_result_bundle";
     public static final String EXTRA_RESULT_APPLY = "extra_result_apply";
-
-    public static final String EXTRA_RESULT_SELECTION = "extra_result_selection";
-    public static final String EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path";
 
     private static final int REQUEST_CODE_CROP = 25;
 
@@ -163,6 +150,7 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         }
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -180,7 +168,7 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {  }
 
     @Override
     public void onPageSelected(int position) {

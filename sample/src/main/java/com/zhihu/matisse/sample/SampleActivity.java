@@ -26,20 +26,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.compress.CompressHelper;
+import com.zhihu.matisse.compress.FileUtil;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
-import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.internal.ui.widget.CropImageView;
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -56,7 +57,6 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.zhihu).setOnClickListener(this);
-        findViewById(R.id.zhihus).setOnClickListener(this);
         findViewById(R.id.dracula).setOnClickListener(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
@@ -70,7 +70,9 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(new Observer<Boolean>() {
                     @Override
-                    public void onSubscribe(Disposable d) { }
+                    public void onSubscribe(Disposable d) {
+
+                    }
 
                     @Override
                     public void onNext(Boolean aBoolean) {
@@ -81,61 +83,46 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .choose(MimeType.ofAll(), false)
                                             .countable(true)
                                             .capture(true)
-                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
-                                            .maxSelectable(9)
-                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                                            .thumbnailScale(0.8f)
-                                            .imageEngine(new GlideEngine())
-                                            .forResult(REQUEST_CODE_CHOOSE);
-                                    break;
-                                case R.id.zhihus:
-                                    Matisse.from(SampleActivity.this)
-                                            .choose(MimeType.ofAll(), false)
-                                            .capture(true)
-                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+                                            .captureStrategy(
+                                                    new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
                                             .maxSelectable(1)
                                             .isCrop(true)
                                             .cropStyle(CropImageView.Style.CIRCLE)
                                             .isCropSaveRectangle(false)
                                             .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                                            .gridExpectedSize(
+                                                    getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                                            .thumbnailScale(0.8f)
+                                            .thumbnailScale(0.85f)
                                             .imageEngine(new GlideEngine())
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;
                                 case R.id.dracula:
                                     Matisse.from(SampleActivity.this)
-                                            .choose(MimeType.ofAll(), false)      // 展示所有类型文件（图片 视频 gif）
-                                            .capture(true)                        // 可拍照
-                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
-                                            .maxSelectable(1)                     // 最多选择一张
-                                            .isCrop(true)                         // 开启裁剪
-                                            .cropOutPutX(400)                     // 设置裁剪后保存图片的宽高
-                                            .cropOutPutY(400)                     // 设置裁剪后保存图片的宽高
-                                            .cropStyle(CropImageView.Style.RECTANGLE)   // 方形裁剪CIRCLE为圆形裁剪
-                                            .isCropSaveRectangle(true)                  // 裁剪后保存方形（只对圆形裁剪有效）
-                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  // 筛选数据源可选大小限制
-                                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                                            .thumbnailScale(0.8f)
+                                            .choose(MimeType.ofImage())
+                                            .theme(R.style.Matisse_Dracula)
+                                            .countable(false)
+                                            .maxSelectable(9)
                                             .imageEngine(new GlideEngine())
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;
                             }
                             mAdapter.setData(null, null);
                         } else {
-                            Toast.makeText(SampleActivity.this, R.string.permission_request_denied, Toast.LENGTH_LONG).show();
+                            Toast.makeText(SampleActivity.this, R.string.permission_request_denied, Toast.LENGTH_LONG)
+                                    .show();
                         }
                     }
 
                     @Override
-                    public void onError(Throwable e) { }
+                    public void onError(Throwable e) {
+
+                    }
 
                     @Override
-                    public void onComplete() { }
+                    public void onComplete() {
+
+                    }
                 });
     }
 
@@ -144,14 +131,24 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             mAdapter.setData(Matisse.obtainResult(data), Matisse.obtainPathResult(data));
-            if (Matisse.obtainPathResult(data).size() <= 1) {
-                Glide.with(SampleActivity.this)
-                        .load(Matisse.obtainPathResult(data).get(0))
-                        .asBitmap()  // some .jpeg files are actually gif
-                        .centerCrop()
-                        .into(((ImageView) findViewById(R.id.image)));
-            }
+
+            // 原文件
+            File file = FileUtil.getFileByPath(Matisse.obtainPathResult(data).get(0));
+
+            // 压缩后的文件         （多个文件压缩可以循环压缩）
+            File file1 = CompressHelper.getDefault(getApplicationContext()).compressToFile(file);
+
+            Toast.makeText(this, getReadableFileSize(file.length()) + " PK " + getReadableFileSize(file1.length()), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String getReadableFileSize(long size) {
+        if (size <= 0) {
+            return "0";
+        }
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     private static class UriAdapter extends RecyclerView.Adapter<UriAdapter.UriViewHolder> {

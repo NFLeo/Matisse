@@ -43,7 +43,6 @@ class GifSizeFilter extends Filter {
     public Set<MimeType> constraintTypes() {
         return new HashSet<MimeType>() {{
             add(MimeType.GIF);
-            add(MimeType.MP4);
         }};
     }
 

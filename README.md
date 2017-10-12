@@ -1,8 +1,8 @@
 ![Image](/image/banner.png)
 
 # Matisse
-优化相册选择，优化单选策略，添加圆形与方形裁剪
 
+优化相册选择，优化单选策略，添加圆形与方形裁剪,  图片选择后压缩，不失真条件下高比率压缩
 
 [![Build Status](https://travis-ci.org/zhihu/Matisse.svg)](https://travis-ci.org/zhihu/Matisse)  
 Matisse is a well-designed local image and video selector for Android. You can  

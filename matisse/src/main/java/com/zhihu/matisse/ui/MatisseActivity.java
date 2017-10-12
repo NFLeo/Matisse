@@ -35,9 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.Album;
 import com.zhihu.matisse.internal.entity.Item;
@@ -50,7 +48,7 @@ import com.zhihu.matisse.internal.ui.MediaSelectionFragment;
 import com.zhihu.matisse.internal.ui.SelectedPreviewActivity;
 import com.zhihu.matisse.internal.ui.adapter.AlbumMediaAdapter;
 import com.zhihu.matisse.internal.ui.adapter.AlbumsAdapter;
-import com.zhihu.matisse.internal.ui.widget.AlbumPopup;
+import com.zhihu.matisse.internal.ui.widget.AlbumsSpinner;
 import com.zhihu.matisse.internal.utils.MediaStoreCompat;
 import com.zhihu.matisse.internal.utils.PathUtils;
 
@@ -61,7 +59,7 @@ import java.util.ArrayList;
  * and also support media selecting operations.
  */
 public class MatisseActivity extends AppCompatActivity implements
-        AlbumCollection.AlbumCallbacks,
+        AlbumCollection.AlbumCallbacks, AdapterView.OnItemSelectedListener,
         MediaSelectionFragment.SelectionProvider, View.OnClickListener,
         AlbumMediaAdapter.CheckStateListener, AlbumMediaAdapter.OnMediaClickListener,
         AlbumMediaAdapter.OnPhotoCapture {
@@ -76,10 +74,10 @@ public class MatisseActivity extends AppCompatActivity implements
     private SelectedItemCollection mSelectedCollection = new SelectedItemCollection(this);
     private SelectionSpec mSpec;
 
+    private AlbumsSpinner mAlbumsSpinner;
     private AlbumsAdapter mAlbumsAdapter;
     private TextView mButtonPreview;
     private TextView mButtonApply;
-    private TextView mTvAlbum;
     private View mContainer;
     private View mEmptyView;
 
@@ -116,45 +114,23 @@ public class MatisseActivity extends AppCompatActivity implements
 
         mButtonPreview = (TextView) findViewById(R.id.button_preview);
         mButtonApply = (TextView) findViewById(R.id.button_apply);
-        mTvAlbum = (TextView) findViewById(R.id.selected_album);
         mButtonPreview.setOnClickListener(this);
         mButtonApply.setOnClickListener(this);
-        mTvAlbum.setOnClickListener(this);
         mContainer = findViewById(R.id.container);
         mEmptyView = findViewById(R.id.empty_view);
 
         mSelectedCollection.onCreate(savedInstanceState);
         updateBottomToolbar();
 
-        mAlbumsAdapter = new AlbumsAdapter(this, null, true);
+        mAlbumsAdapter = new AlbumsAdapter(this, null, false);
+        mAlbumsSpinner = new AlbumsSpinner(this);
+        mAlbumsSpinner.setOnItemSelectedListener(this);
+        mAlbumsSpinner.setSelectedTextView((TextView) findViewById(R.id.selected_album));
+        mAlbumsSpinner.setPopupAnchorView(findViewById(R.id.toolbar));
+        mAlbumsSpinner.setAdapter(mAlbumsAdapter);
         mAlbumCollection.onCreate(this, this);
         mAlbumCollection.onRestoreInstanceState(savedInstanceState);
         mAlbumCollection.loadAlbums();
-    }
-
-    private AlbumPopup mFolderPopupWindow;
-
-    /** 创建弹出的ListView */
-    private void createPopupFolderList() {
-        if (mFolderPopupWindow == null) {
-            mFolderPopupWindow = new AlbumPopup(this, mAlbumsAdapter);
-        }
-
-        mFolderPopupWindow.showPopupWindow(mTvAlbum);
-
-        mFolderPopupWindow.setOnItemClickListener(new AlbumPopup.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                mFolderPopupWindow.dismiss();
-                mAlbumCollection.setStateCurrentSelection(position);
-                mAlbumsAdapter.getCursor().moveToPosition(position);
-                Album album = Album.valueOf(mAlbumsAdapter.getCursor());
-                if (album.isAll() && SelectionSpec.getInstance().capture) {
-                    album.addCaptureCount();
-                }
-                onAlbumSelected(album);
-            }
-        });
     }
 
     @Override
@@ -309,13 +285,23 @@ public class MatisseActivity extends AppCompatActivity implements
                 setResult(RESULT_OK, result);
                 finish();
             }
-        } else if (v.getId() == R.id.selected_album) {
-            createPopupFolderList();
-            //默认选择当前选择的上一个，当目录很多时，直接定位到已选中的条目
-//                int index = mImageFolderAdapter.getSelectIndex();
-//                index = index == 0 ? index : index - 1;
-            mFolderPopupWindow.setSelection(mAlbumCollection.getCurrentSelection());
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mAlbumCollection.setStateCurrentSelection(position);
+        mAlbumsAdapter.getCursor().moveToPosition(position);
+        Album album = Album.valueOf(mAlbumsAdapter.getCursor());
+        if (album.isAll() && SelectionSpec.getInstance().capture) {
+            album.addCaptureCount();
+        }
+        onAlbumSelected(album);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     @Override
@@ -328,6 +314,8 @@ public class MatisseActivity extends AppCompatActivity implements
             @Override
             public void run() {
                 cursor.moveToPosition(mAlbumCollection.getCurrentSelection());
+                mAlbumsSpinner.setSelection(MatisseActivity.this,
+                        mAlbumCollection.getCurrentSelection());
                 Album album = Album.valueOf(cursor);
                 if (album.isAll() && SelectionSpec.getInstance().capture) {
                     album.addCaptureCount();

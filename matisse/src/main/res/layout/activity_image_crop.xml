@@ -5,30 +5,39 @@
               android:background="#000"
               android:orientation="vertical">
 
-    <include layout="@layout/include_top_bar"/>
-
     <com.zhihu.matisse.internal.ui.widget.CropImageView
         android:id="@+id/cv_crop_image"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
-    <!-- <com.lzy.imagepicker.view.crop.CropImageView2
-         android:id="@+id/cv_crop_image"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:background="#000"
-         custom:backgroundColor="#FFFFFB"
-         custom:cropMode="ratio_fit_image"
-         custom:frameColor="#86C166"
-         custom:frameStrokeWeight="1dp"
-         custom:guideColor="#AA86C166"
-         custom:guideShowMode="show_on_touch"
-         custom:guideStrokeWeight="1dp"
-         custom:handleColor="#86C166"
-         custom:handleShowMode="show_always"
-         custom:handleSize="8dp"
-         custom:minFrameSize="50dp"
-         custom:overlayColor="#AA1C1C1C"
-         custom:touchPadding="8dp"/>-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/bottomToolbar.bg"
+        android:elevation="4dp" >
+
+        <TextView
+            android:id="@+id/button_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foreground="?selectableItemBackground"
+            android:padding="16dp"
+            android:layout_gravity="start"
+            android:text="@string/button_back"
+            android:textColor="?attr/bottomToolbar.preview.textColor"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/button_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:foreground="?selectableItemBackground"
+            android:padding="16dp"
+            android:textColor="?attr/bottomToolbar.apply.textColor"
+            android:textSize="15sp"/>
+
+    </FrameLayout>
 
 </LinearLayout>

@@ -34,12 +34,7 @@
     <attr name="item.checkCircle.borderColor" format="reference|color"/>
     <attr name="capture.textColor" format="reference|color"/>
 
-    <!--popwindow封装-->
-    <style name="PopupAnimaFade" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/base_popup_fade_in</item>
-        <item name="android:windowExitAnimation">@anim/base_popup_fade_out</item>
-    </style>
-
+    <!--裁剪框-->
     <declare-styleable name="CropImageView">
         <attr name="cropMaskColor" format="color"/>
         <attr name="cropBorderColor" format="color"/>
@@ -51,5 +46,4 @@
             <enum name="circle" value="1"/>
         </attr>
     </declare-styleable>
-
 </resources>

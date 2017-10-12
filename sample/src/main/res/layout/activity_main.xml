@@ -43,20 +43,7 @@
             android:layout_marginRight="@dimen/item_margin_horizontal"
             android:layout_marginTop="8dp"
             android:minHeight="56dp"
-            android:text="多选"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:theme="@style/ZhihuOverlay"/>
-
-        <Button
-            android:id="@+id/zhihus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/item_margin_horizontal"
-            android:layout_marginRight="@dimen/item_margin_horizontal"
-            android:layout_marginTop="8dp"
-            android:minHeight="56dp"
-            android:text="单选圆形裁剪"
+            android:text="Zhihu"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:theme="@style/ZhihuOverlay"/>
@@ -65,24 +52,16 @@
             android:id="@+id/dracula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
             android:layout_marginLeft="@dimen/item_margin_horizontal"
             android:layout_marginRight="@dimen/item_margin_horizontal"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:minHeight="56dp"
-            android:text="单选方形形裁剪"
+            android:text="Dracula"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:theme="@style/ZhihuOverlay"/>
-
+            android:theme="@style/DraculaOverlay"/>
     </LinearLayout>
-
-    <ImageView
-        android:layout_margin="30dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/image"
-        android:adjustViewBounds="true"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"

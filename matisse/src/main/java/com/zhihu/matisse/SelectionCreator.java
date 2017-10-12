@@ -88,6 +88,7 @@ public final class SelectionCreator {
 
     /**
      * Constructs a new specification builder on the context.
+     *
      * @param matisse   a requester context wrapper.
      * @param mimeTypes MIME type set to select.
      */
@@ -101,6 +102,7 @@ public final class SelectionCreator {
 
     /**
      * Whether to show only one media type if choosing medias are only images or videos.
+     *
      * @param showSingleMediaType whether to show only one media type, either images or videos.
      * @return {@link SelectionCreator} for fluent API.
      * @see SelectionSpec#onlyShowImages()
@@ -118,6 +120,7 @@ public final class SelectionCreator {
      * 1. com.zhihu.matisse.R.style.Matisse_Zhihu;
      * 2. com.zhihu.matisse.R.style.Matisse_Dracula
      * you can define a custom theme derived from the above ones or other themes.
+     *
      * @param themeId theme resource id. Default value is com.zhihu.matisse.R.style.Matisse_Zhihu.
      * @return {@link SelectionCreator} for fluent API.
      */
@@ -128,6 +131,7 @@ public final class SelectionCreator {
 
     /**
      * Show a auto-increased number or a check mark when user select media.
+     *
      * @param countable true for a auto-increased number from 1, false for a check mark. Default
      *                  value is false.
      * @return {@link SelectionCreator} for fluent API.
@@ -139,20 +143,20 @@ public final class SelectionCreator {
 
     /**
      * Maximum selectable count.
+     *
      * @param maxSelectable Maximum selectable count. Default value is 1.
      * @return {@link SelectionCreator} for fluent API.
      */
     public SelectionCreator maxSelectable(int maxSelectable) {
-        mSelectionSpec.maxSelectable = maxSelectable < 1 ? 1 : maxSelectable;
-        // 最大选择数小于或等于1时，不记录图片顺序
-        if (maxSelectable <= 1) {
-            mSelectionSpec.countable = false;
-        }
+        if (maxSelectable < 1)
+            throw new IllegalArgumentException("maxSelectable must be greater than or equal to one");
+        mSelectionSpec.maxSelectable = maxSelectable;
         return this;
     }
 
     /**
      * Add filter to filter each selecting item.
+     *
      * @param filter {@link Filter}
      * @return {@link SelectionCreator} for fluent API.
      */
@@ -166,9 +170,10 @@ public final class SelectionCreator {
     }
 
     /**
-     * Whether open camera
      * Determines whether the photo capturing is enabled or not on the media grid view.
+     * <p>
      * If this value is set true, photo capturing entry will appear only on All Media's page.
+     *
      * @param enable Whether to enable capturing or not. Default value is false;
      * @return {@link SelectionCreator} for fluent API.
      */
@@ -245,6 +250,7 @@ public final class SelectionCreator {
 
     /**
      * Provide an image engine.
+     * <p>
      * There are two built-in image engines:
      * 1. {@link com.zhihu.matisse.engine.impl.GlideEngine}
      * And you can implement your own image engine.

@@ -9,19 +9,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zhihu.matisse.R;
-import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.internal.ui.BasePreviewActivity;
 import com.zhihu.matisse.internal.ui.widget.CropImageView;
 import com.zhihu.matisse.internal.utils.BitmapUtil;
+import com.zhihu.matisse.internal.utils.Platform;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * ================================================
@@ -44,20 +43,36 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mSpec = SelectionSpec.getInstance();
+        setTheme(mSpec.themeId);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_image_crop);
+
+        if (Platform.hasKitKat()) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+        if (mSpec.needOrientationRestriction()) {
+            setRequestedOrientation(mSpec.orientation);
+        }
 
         imagePath = getIntent().getStringExtra(MatisseActivity.EXTRA_RESULT_SELECTION_PATH);
 
         mSpec = SelectionSpec.getInstance();
 
         //初始化View
-        findViewById(R.id.btn_back).setOnClickListener(this);
-        Button btn_ok = (Button) findViewById(R.id.btn_ok);
+        TextView button_preview = (TextView) findViewById(R.id.button_preview);
+        button_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+
+        TextView btn_ok = (TextView) findViewById(R.id.button_apply);
         btn_ok.setText("完成");
         btn_ok.setOnClickListener(this);
-        TextView tv_des = (TextView) findViewById(R.id.tv_des);
-        tv_des.setText("裁剪");
         mCropImageView = (CropImageView) findViewById(R.id.cv_crop_image);
         mCropImageView.setOnBitmapSaveCompleteListener(this);
 
@@ -99,10 +114,10 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_back) {
+        if (id == R.id.button_back) {
             setResult(RESULT_CANCELED);
             finish();
-        } else if (id == R.id.btn_ok) {
+        } else if (id == R.id.button_apply) {
             mCropImageView.saveBitmapToFile(getCropCacheFolder(this), mOutputX, mOutputY, mIsSaveRectangle);
         }
     }

@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.library'
+apply plugin: 'checkstyle'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 11
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
-ext.supportLibVersion = '25.1.0'
+ext.supportLibVersion = '25.3.1'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -48,4 +45,15 @@ dependencies {
     compile 'it.sephiroth.android.library.imagezoom:library:1.0.4'
 
     provided 'com.github.bumptech.glide:glide:3.7.0'
+    provided 'com.squareup.picasso:picasso:2.5.2'
+}
+
+task checkstyle(type:Checkstyle) {
+    description 'Runs Checkstyle inspection against matisse sourcesets.'
+    group = 'Code Quality'
+    configFile rootProject.file('checkstyle.xml')
+    ignoreFailures = false
+    showViolations true
+    classpath = files()
+    source 'src/main/java'
 }
