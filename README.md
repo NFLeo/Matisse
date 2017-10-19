@@ -1,9 +1,34 @@
 ![Image](/image/banner.png)
 
 # Matisse
+本项目在原项目上修改（2017/10/10号版本）
+*主要修改内容为：*
+```
+1. 优化相册选择。
+2. 优化单选策略。
+3. 添加圆形与方形裁剪。
+4. 图片选择后压缩，不失真条件下高比率压缩。
+```
 
-优化相册选择，优化单选策略，添加圆形与方形裁剪,  图片选择后压缩，不失真条件下高比率压缩
 
+2017-10-19 
+修改内容：
+    裁剪框尺寸与屏幕尺寸关联，修复小手机裁剪框出界
+	
+2017-10-12 
+修改内容：
+    图片选择成功后压缩，只对图片进行压缩，多张压缩只需循环执行
+	
+
+2017-10-11 
+修改内容：
+    解决选择视频时裁剪崩溃
+	
+
+2017-7-26 
+修改内容：
+    修复方形裁剪无法拍照
+	
 [![Build Status](https://travis-ci.org/zhihu/Matisse.svg)](https://travis-ci.org/zhihu/Matisse)  
 Matisse is a well-designed local image and video selector for Android. You can  
 - Use it in Activity or Fragment
@@ -18,8 +43,6 @@ Matisse is a well-designed local image and video selector for Android. You can
 |![](image/screenshot_zhihu.png) | ![](image/screenshot_dracula.png) | ![](image/screenshot_preview.png)|
 
 Check out [Matisse releases](https://github.com/zhihu/Matisse/releases) to see more unstable versions.
-
-If you use [Picasso](https://github.com/square/picasso) as your image engine, add rules as Picasso's README says.  
 And add extra rule:
 ```pro
 -dontwarn com.bumptech.glide.**
