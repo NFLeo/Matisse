@@ -89,9 +89,10 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .isCrop(true)
                                             .cropStyle(CropImageView.Style.CIRCLE)
                                             .isCropSaveRectangle(false)
+                                            .cropFocusHeight(222)
+                                            .cropFocusWidth(222)
                                             .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                                            .gridExpectedSize(
-                                                    getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .thumbnailScale(0.85f)
                                             .imageEngine(new GlideEngine())
@@ -99,10 +100,16 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                     break;
                                 case R.id.dracula:
                                     Matisse.from(SampleActivity.this)
-                                            .choose(MimeType.ofImage())
-                                            .theme(R.style.Matisse_Dracula)
-                                            .countable(false)
-                                            .maxSelectable(9)
+                                            .choose(MimeType.ofAll(), false)
+                                            .countable(true)
+                                            .capture(true)
+                                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+                                            .maxSelectable(1)
+                                            .isCrop(true)
+                                            .cropStyle(CropImageView.Style.RECTANGLE)
+                                            .isCropSaveRectangle(false)
+                                            .cropFocusWidth(111)
+                                            .cropFocusHeight(555)
                                             .imageEngine(new GlideEngine())
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;

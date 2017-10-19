@@ -90,8 +90,8 @@ public final class SelectionSpec {
         isCropSaveRectangle = false;
         cropOutPutX = 300;
         cropOutPutY = 300;
-        cropFocusWidth = 800;
-        cropFocusHeight = 800;
+        cropFocusWidth = 0;
+        cropFocusHeight = 0;
         cropStyle = CropImageView.Style.RECTANGLE;
     }
 

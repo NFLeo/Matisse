@@ -19,6 +19,8 @@ import com.zhihu.matisse.internal.ui.BasePreviewActivity;
 import com.zhihu.matisse.internal.ui.widget.CropImageView;
 import com.zhihu.matisse.internal.utils.BitmapUtil;
 import com.zhihu.matisse.internal.utils.Platform;
+import com.zhihu.matisse.internal.utils.SizeUtils;
+import com.zhihu.matisse.internal.utils.UIUtils;
 
 import java.io.File;
 
@@ -80,10 +82,15 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
         mOutputX = mSpec.cropOutPutX;
         mOutputY = mSpec.cropOutPutY;
         mIsSaveRectangle = mSpec.isCropSaveRectangle;
+        int cropWidth = mSpec.cropFocusWidth > 0 && mSpec.cropFocusWidth < UIUtils.getScreenWidth(this) - (int) SizeUtils.dp2px(this, 50)
+                ? mSpec.cropFocusWidth : UIUtils.getScreenWidth(this) - (int) SizeUtils.dp2px(this, 50);
+
+        int cropHeight = mSpec.cropFocusHeight > 0 && mSpec.cropFocusHeight < UIUtils.getScreenHeight(this) - (int) SizeUtils.dp2px(this, 400)
+                ? mSpec.cropFocusHeight : UIUtils.getScreenHeight(this) - (int) SizeUtils.dp2px(this, 400);
 
         mCropImageView.setFocusStyle(mSpec.cropStyle);
-        mCropImageView.setFocusWidth(mSpec.cropFocusWidth);
-        mCropImageView.setFocusHeight(mSpec.cropFocusHeight);
+        mCropImageView.setFocusWidth(cropWidth);
+        mCropImageView.setFocusHeight(cropHeight);
 
         //缩放图片
         BitmapFactory.Options options = new BitmapFactory.Options();
