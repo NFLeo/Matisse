@@ -10,6 +10,9 @@
 4. 图片选择后压缩，不失真条件下高比率压缩。
 ```
 
+2017-10-19
+修改内容：
+    同步更新（ 11 月23 日前） 官方版本优化内容
 
 2017-10-19 
 修改内容：
@@ -41,6 +44,10 @@ Matisse is a well-designed local image and video selector for Android. You can
 | Zhihu Style                    | Dracula Style                     | Preview                          |
 |:------------------------------:|:---------------------------------:|:--------------------------------:|
 |![](image/screenshot_zhihu.png) | ![](image/screenshot_dracula.png) | ![](image/screenshot_preview.png)|
+
+| Circle Crop                    | Square Crop                       |
+|:------------------------------:|:---------------------------------:|
+|![](image/screenshot_circlecrop.png) | ![](image/screenshot_squarecrop.png) |
 
 Check out [Matisse releases](https://github.com/zhihu/Matisse/releases) to see more unstable versions.
 And add extra rule:

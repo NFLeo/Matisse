@@ -89,8 +89,6 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .isCrop(true)
                                             .cropStyle(CropImageView.Style.CIRCLE)
                                             .isCropSaveRectangle(false)
-                                            .cropFocusHeight(222)
-                                            .cropFocusWidth(222)
                                             .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                                             .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -108,8 +106,6 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .isCrop(true)
                                             .cropStyle(CropImageView.Style.RECTANGLE)
                                             .isCropSaveRectangle(false)
-                                            .cropFocusWidth(111)
-                                            .cropFocusHeight(555)
                                             .imageEngine(new GlideEngine())
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;
