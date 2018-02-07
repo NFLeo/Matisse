@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.library'
-apply plugin: 'checkstyle'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 11
@@ -45,15 +44,4 @@ dependencies {
     compile 'it.sephiroth.android.library.imagezoom:library:1.0.4'
 
     provided 'com.github.bumptech.glide:glide:3.7.0'
-    provided 'com.squareup.picasso:picasso:2.5.2'
-}
-
-task checkstyle(type:Checkstyle) {
-    description 'Runs Checkstyle inspection against matisse sourcesets.'
-    group = 'Code Quality'
-    configFile rootProject.file('checkstyle.xml')
-    ignoreFailures = false
-    showViolations true
-    classpath = files()
-    source 'src/main/java'
 }

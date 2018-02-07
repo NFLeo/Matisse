@@ -14,7 +14,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<resources>
+<resources
+    tools:ignore="ExtraTranslation"
+    xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <string name="album_name_all">全部</string>
 
     <string name="button_preview">预览</string>

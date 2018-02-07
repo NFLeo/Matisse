@@ -3,12 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Matisse.iml" filepath="$PROJECT_DIR$/Matisse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Matisse.iml" filepath="$PROJECT_DIR$/Matisse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Matisses.iml" filepath="$PROJECT_DIR$/Matisses.iml" />
+      <module fileurl="file://H:\leo\gitProject\Matisse\Matisse.iml" filepath="H:\leo\gitProject\Matisse\Matisse.iml" />
+      <module fileurl="file://H:\leo\gitProject\Matisse\Matisses.iml" filepath="H:\leo\gitProject\Matisse\Matisses.iml" />
       <module fileurl="file://$PROJECT_DIR$/matisse/matisse.iml" filepath="$PROJECT_DIR$/matisse/matisse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/matisse/matisse.iml" filepath="$PROJECT_DIR$/matisse/matisse.iml" />
+      <module fileurl="file://H:\leo\gitProject\Matisse\matisse\matisse.iml" filepath="H:\leo\gitProject\Matisse\matisse\matisse.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://H:\leo\gitProject\Matisse\sample\sample.iml" filepath="H:\leo\gitProject\Matisse\sample\sample.iml" />
     </modules>
   </component>
 </project>
