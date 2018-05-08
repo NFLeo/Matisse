@@ -20,9 +20,11 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 import com.zhihu.matisse.internal.ui.widget.CropImageView;
+import com.zhihu.matisse.listener.OnSelectedListener;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -94,6 +97,15 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                             .thumbnailScale(0.85f)
                                             .imageEngine(new GlideEngine())
+                                            .setOnSelectedListener(new OnSelectedListener() {
+                                                @Override
+                                                public void onSelected(@NonNull List<Uri> uriList, @NonNull List<String> pathList) {
+                                                    if (uriList != null && uriList.size() > 0 && pathList != null && pathList.size() > 0) {
+                                                        Log.d("Leo", uriList.size() + " " + uriList.get(0) + " " + pathList.size() + " " + pathList.get(0));
+                                                        Toast.makeText(SampleActivity.this, uriList.get(0) + " " + pathList.get(0), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            })
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;
                                 case R.id.dracula:

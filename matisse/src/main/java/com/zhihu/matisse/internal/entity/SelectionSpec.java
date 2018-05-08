@@ -25,6 +25,7 @@ import com.zhihu.matisse.engine.ImageEngine;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.ui.widget.CropImageView;
+import com.zhihu.matisse.listener.OnSelectedListener;
 
 import java.io.File;
 import java.util.List;
@@ -49,7 +50,7 @@ public final class SelectionSpec {
     public int gridExpectedSize;
     public float thumbnailScale;
     public ImageEngine imageEngine;
-
+    public OnSelectedListener onSelectedListener;
     public int requestCode;
 
     public boolean isCrop;                 // 裁剪
