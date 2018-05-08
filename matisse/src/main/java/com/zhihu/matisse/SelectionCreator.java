@@ -31,6 +31,7 @@ import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.internal.ui.widget.CropImageView;
+import com.zhihu.matisse.listener.OnCheckedListener;
 import com.zhihu.matisse.listener.OnSelectedListener;
 import com.zhihu.matisse.ui.MatisseActivity;
 
@@ -200,6 +201,39 @@ public final class SelectionCreator {
      */
     public SelectionCreator capture(boolean enable) {
         mSelectionSpec.capture = enable;
+        return this;
+    }
+
+    /**
+     * Show a original photo check options.Let users decide whether use original photo after select
+     *
+     * @param enable Whether to enable original photo or not
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator originalEnable(boolean enable) {
+        mSelectionSpec.originalable = enable;
+        return this;
+    }
+
+    /**
+     * Maximum original size,the unit is MB. Only useful when {link@originalEnable} set true
+     *
+     * @param size Maximum original size. Default value is Integer.MAX_VALUE
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator maxOriginalSize(int size) {
+        mSelectionSpec.originalMaxSize = size;
+        return this;
+    }
+
+    /**
+     * Set listener for callback immediately when user check or uncheck original.
+     *
+     * @param listener {@link OnSelectedListener}
+     * @return {@link SelectionCreator} for fluent API.
+     */
+    public SelectionCreator setOnCheckedListener(@Nullable OnCheckedListener listener) {
+        mSelectionSpec.onCheckedListener = listener;
         return this;
     }
 

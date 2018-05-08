@@ -15,15 +15,15 @@
   limitations under the License.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.zhihu.matisse.internal.ui.widget.PreviewViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"/>
+        android:background="@android:color/black" />
 
     <FrameLayout
         android:id="@+id/bottom_toolbar"
@@ -38,21 +38,65 @@
             android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:foreground="?selectableItemBackground"
             android:padding="16dp"
-            android:layout_gravity="start"
             android:text="@string/button_back"
             android:textColor="?attr/preview.bottomToolbar.back.textColor"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/size"
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/preview_bottom_size"
-            android:textSize="16sp"
-            android:visibility="gone"/>
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:id="@+id/originalLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:foreground="?selectableItemBackground"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:visibility="visible"
+                tools:showIn="@layout/activity_matisse">
+
+
+                <com.zhihu.matisse.internal.ui.widget.CheckRadioView
+                    android:id="@+id/original"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_preview_radio_off"
+                    android:tint="#ffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:enabled="true"
+                    android:paddingLeft="4dp"
+                    android:paddingStart="4dp"
+                    android:text="@string/button_original"
+                    android:textColor="?attr/preview.bottomToolbar.back.textColor"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/preview_bottom_size"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/button_apply"
@@ -62,7 +106,7 @@
             android:foreground="?selectableItemBackground"
             android:padding="16dp"
             android:textColor="?attr/preview.bottomToolbar.apply.textColor"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
     </FrameLayout>
 
@@ -77,7 +121,7 @@
             android:id="@+id/check_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"/>
+            android:padding="10dp" />
     </FrameLayout>
 
 </RelativeLayout>

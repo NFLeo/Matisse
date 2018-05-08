@@ -44,6 +44,7 @@ import com.zhihu.matisse.listener.OnSelectedListener;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.HashSet;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -84,17 +85,20 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                 case R.id.zhihu:
                                     Matisse.from(SampleActivity.this)
                                             .choose(MimeType.ofAll(), false)
+                                            .showSingleMediaType(true)
                                             .countable(true)
                                             .capture(true)
                                             .captureStrategy(
                                                     new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
-                                            .maxSelectable(1)
+                                            .maxSelectable(9)
                                             .isCrop(true)
                                             .cropStyle(CropImageView.Style.CIRCLE)
                                             .isCropSaveRectangle(false)
-                                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                            .addFilter(new GifSizeFilter(320, 320, 3 * Filter.K * Filter.K))
                                             .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                            .originalEnable(true)
+                                            .maxOriginalSize(1)
                                             .thumbnailScale(0.85f)
                                             .imageEngine(new GlideEngine())
                                             .setOnSelectedListener(new OnSelectedListener() {
@@ -102,7 +106,6 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                                 public void onSelected(@NonNull List<Uri> uriList, @NonNull List<String> pathList) {
                                                     if (uriList != null && uriList.size() > 0 && pathList != null && pathList.size() > 0) {
                                                         Log.d("Leo", uriList.size() + " " + uriList.get(0) + " " + pathList.size() + " " + pathList.get(0));
-                                                        Toast.makeText(SampleActivity.this, uriList.get(0) + " " + pathList.get(0), Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             })
@@ -110,8 +113,9 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                     break;
                                 case R.id.dracula:
                                     Matisse.from(SampleActivity.this)
-                                            .choose(MimeType.ofAll(), false)
+                                            .choose(MimeType.ofVideo(), false)
                                             .countable(true)
+                                            .showSingleMediaType(true)
                                             .capture(true)
                                             .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
                                             .maxSelectable(1)

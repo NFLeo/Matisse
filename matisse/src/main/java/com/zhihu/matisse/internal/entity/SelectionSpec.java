@@ -25,6 +25,7 @@ import com.zhihu.matisse.engine.ImageEngine;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.ui.widget.CropImageView;
+import com.zhihu.matisse.listener.OnCheckedListener;
 import com.zhihu.matisse.listener.OnSelectedListener;
 
 import java.io.File;
@@ -51,6 +52,10 @@ public final class SelectionSpec {
     public float thumbnailScale;
     public ImageEngine imageEngine;
     public OnSelectedListener onSelectedListener;
+    public boolean originalable;
+    public int originalMaxSize;
+    public OnCheckedListener onCheckedListener;
+
     public int requestCode;
 
     public boolean isCrop;                 // 裁剪
@@ -98,6 +103,8 @@ public final class SelectionSpec {
         cropFocusWidth = 0;
         cropFocusHeight = 0;
         cropStyle = CropImageView.Style.RECTANGLE;
+        originalable = false;
+        originalMaxSize = Integer.MAX_VALUE;
     }
 
     public boolean singleSelectionModeEnabled() {
