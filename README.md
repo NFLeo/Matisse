@@ -1,7 +1,7 @@
 ![Image](/image/banner.png)
 
 # Matisse
-本项目在原项目上修改（2017/10/10号版本）
+本项目在原项目上修改（2018/5月版本）
 *主要修改内容为：*
 ```
 1. 优化相册选择。
@@ -11,6 +11,8 @@
 
 * 注：裁剪成功后只返回裁剪后图片的绝对路径，不返回Uri，需自行转换
 
+具体调用查看 SelectionCreator.java
+
 关于打包报错问题：
 主项目gradle中android目录下添加
 
@@ -19,6 +21,11 @@
     }
 
 ```
+
+2018-05-08
+修改内容：
+    同步添加选中回调、选中原图功能
+
 2018-02-07
 修改内容：
     处理打包报错问题，删除多余语言支持
@@ -110,51 +117,3 @@ Matisse.from(SampleActivity.this)
         .imageEngine(new GlideEngine())
         .forResult(REQUEST_CODE_CHOOSE);
 ```
- 
-#### Themes
-There are two built-in themes you can use to start `MatisseActivity`:
-- `R.style.Matisse_Zhihu` (light mode)
-- `R.style.Matisse_Dracula` (dark mode)  
-
-And Also you can define your own theme as you wish.
-
-#### Receive Result
-In `onActivityResult()` callback of the starting `Activity` or `Fragment`:
-
-```java
-List<Uri> mSelected;
-
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
-        mSelected = Matisse.obtainResult(data);
-        Log.d("Matisse", "mSelected: " + mSelected);
-    }
-}
-```
-
-#### More
-Find more details about Matisse in [wiki](https://github.com/zhihu/Matisse/wiki).
-
-## Contributing
-[Matisse is an Open Source Project](https://github.com/zhihu/Matisse/blob/master/CONTRIBUTING.md)
-
-## Thanks
-This library is inspired by [Laevatein](https://github.com/nohana/Laevatein) and uses some of its source code.
-
-## License
-
-    Copyright 2017 Zhihu Inc.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
