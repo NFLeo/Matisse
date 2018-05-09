@@ -184,10 +184,11 @@ public abstract class BasePreviewActivity extends AppCompatActivity implements V
         if (v.getId() == R.id.button_back) {
             onBackPressed();
         } else if (v.getId() == R.id.button_apply) {
-            if (mSpec.isCrop && mSpec.maxSelectable <= 1) {
+            Item item = mAdapter.getMediaItem(mPager.getCurrentItem());
+            if (mSpec.isCrop && mSpec.maxSelectable <= 1 && !item.mimeType.toLowerCase().contains("video")) {
                 Intent intentCrop = new Intent(this, ImageCropActivity.class);
                 intentCrop.putExtra(MatisseActivity.EXTRA_RESULT_SELECTION_PATH,
-                        PathUtils.getPath(this, mAdapter.getMediaItem(mPager.getCurrentItem()).getContentUri()));
+                        PathUtils.getPath(this, item.getContentUri()));
                 startActivityForResult(intentCrop, REQUEST_CODE_CROP);
             } else {
                 sendBackResult(true);

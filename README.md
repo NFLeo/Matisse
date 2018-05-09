@@ -14,6 +14,13 @@
 具体调用查看 SelectionCreator.java
 
 关于打包报错问题：
+
+使用：
+1. 复制matisse依赖包
+2. 为适配7.0，,项目manifest的privider标签下 paths文件中添加
+    <external-path  name="my_images" path="Pictures"/>
+
+
 主项目gradle中android目录下添加
 
     lintOptions{
