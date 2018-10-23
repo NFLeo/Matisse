@@ -21,6 +21,7 @@ import android.os.Message;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 
@@ -251,14 +252,18 @@ public class CropImageView extends AppCompatImageView {
         if (mSaving || null == getDrawable()) {
             return super.onTouchEvent(event);
         }
+
+        Log.e("TEST == ", (event.getAction() & MotionEvent.ACTION_MASK) + "");
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:  //第一个点按下
+                Log.e("TEST 1", "down");
                 savedMatrix.set(matrix);   //以后每次需要变换的时候，以现在的状态为基础进行变换
                 pA.set(event.getX(), event.getY());
                 pB.set(event.getX(), event.getY());
                 mode = DRAG;
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:  //第二个点按下
+                Log.e("TEST 1", "pointer down");
                 if (event.getActionIndex() > 1) break;
                 pA.set(event.getX(0), event.getY(0));
                 pB.set(event.getX(1), event.getY(1));
@@ -268,8 +273,10 @@ public class CropImageView extends AppCompatImageView {
                 if (oldDist > 10f) mode = ZOOM_OR_ROTATE;//两点之间的距离大于10才有效
                 break;
             case MotionEvent.ACTION_MOVE:
+                Log.e("TEST 1", "pointer move " + mode +" --");
                 if (mode == ZOOM_OR_ROTATE) {
-                    PointF pC = new PointF(event.getX(1) - event.getX(0) + pA.x, event.getY(1) - event.getY(0) + pA.y);
+                    PointF pC = new PointF(event.getX(1) - event.getX(0) + pA.x,
+                            event.getY(1) - event.getY(0) + pA.y);
                     double a = spacing(pB.x, pB.y, pC.x, pC.y);
                     double b = spacing(pA.x, pA.y, pC.x, pC.y);
                     double c = spacing(pA.x, pA.y, pB.x, pB.y);
@@ -288,7 +295,8 @@ public class CropImageView extends AppCompatImageView {
                     fixTranslation();
                     setImageMatrix(matrix);
                 } else if (mode == ZOOM) {
-                    float newDist = spacing(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+                    float newDist = spacing(event.getX(0), event.getY(0),
+                            event.getX(1), event.getY(1));
                     if (newDist > 10f) {
                         matrix.set(savedMatrix);
                         // 这里之所以用 maxPostScale 矫正一下，主要是防止缩放到最大时，继续缩放图片会产生位移
@@ -301,7 +309,8 @@ public class CropImageView extends AppCompatImageView {
                         }
                     }
                 } else if (mode == ROTATE) {
-                    PointF pC = new PointF(event.getX(1) - event.getX(0) + pA.x, event.getY(1) - event.getY(0) + pA.y);
+                    PointF pC = new PointF(event.getX(1) - event.getX(0) + pA.x,
+                            event.getY(1) - event.getY(0) + pA.y);
                     double a = spacing(pB.x, pB.y, pC.x, pC.y);
                     double b = spacing(pA.x, pA.y, pC.x, pC.y);
                     double c = spacing(pA.x, pA.y, pB.x, pB.y);
@@ -454,7 +463,8 @@ public class CropImageView extends AppCompatImageView {
             Matrix matrix = new Matrix();
             matrix.setRotate(degrees, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
             try {
-                Bitmap rotateBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                Bitmap rotateBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                        bitmap.getHeight(), matrix, true);
                 if (bitmap != rotateBitmap) {
 //                    bitmap.recycle();
                     return rotateBitmap;
